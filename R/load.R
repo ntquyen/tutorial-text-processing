@@ -3,6 +3,7 @@
 lines <- readLines('data/raw.dat')
 
 library(stringr)
+library(plyr)
 
 countries = 'Algeria, Argentina, Austria, Benin, Botswana, Brazil, Burkina Faso, Chile, China, Congo, Costa Rica, Côte d’Ivoire, Cuba, Czech Republic, Estonia, Ethiopia, France, Gabon, Germany, India, Indonesia, Ireland, Italy, Japan, Kazakhstan, Kenya, Kuwait, Maldives, Mexico, Montenegro, Morocco, Namibia, Pakistan, Peru, Philippines, Republic of Korea, Romania, Russian Federation, Saudi Arabia, Sierra Leone, South Africa, the former Yugoslav Republic of Macedonia, United Arab Emirates, United Kingdom of Great Britain and Northern Ireland, Venezuela (Bolivarian Republic of), Viet Nam, United States of America'
 countries.vector = str_trim(str_split(countries, ",")[[1]])
