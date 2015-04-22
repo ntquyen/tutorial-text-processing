@@ -1,10 +1,10 @@
-setwd("~/Documents/resources/Courses/projects/ir")
+# setwd("~/Documents/resources/Courses/projects/ir/tutorial-text-processing")
 
 library(XML)
 library(stringr)
 library(dplyr)
 
-html.raw <- htmlTreeParse("./A_HRC_25_2_session_report_AUV_for_web.htm", useInternalNodes=T)
+html.raw <- htmlTreeParse("./data/A_HRC_25_2_session_report_AUV_for_web.htm", useInternalNodes=T)
 
 html.parse <- xpathApply(html.raw, "//p", xmlValue)
 
@@ -53,7 +53,7 @@ write.csv(resolutions, file="resolutions.csv")
 
 # Extract section and write to file
 for (i in 1:m) {
-  filename = paste(gsub("[,.:’']", "", resolutions$resolution[i]), 
+  filename = paste("./data/", gsub("[,.:’']", "", resolutions$resolution[i]), 
                    ".txt", sep="");
   from <- resolutions$section[i]
   lines <- 50
