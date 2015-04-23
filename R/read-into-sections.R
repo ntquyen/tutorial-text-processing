@@ -49,22 +49,40 @@ for (i in 1:m) {
 resolutions <- data.frame(id = ids, adoption.date = adoption.dates, resolution = resolutions, section = sections)
 resolutions <- arrange(resolutions, section)
 
-write.csv(resolutions, file="resolutions.csv")
+write.csv(resolutions, file="./data/resolutions.csv")
+
 
 # Extract section and write to file
+total.lines <- length(html.text)
 for (i in 1:m) {
   filename = paste("./data/drafts/", gsub("[,.:’']", "", resolutions$resolution[i]), 
                    ".txt", sep="");
+  section <- c()
   from <- resolutions$section[i]
-  lines <- 50
-  
-  # A section is rarely larger than 50 lines.
-  # But I also want to improve this code
-  if (i < m && resolutions$section[i + 1] - from < lines) {
-    lines <- resolutions$section[i + 1] - 1
+  for(j in from:total.lines) {
+    ## No way to detect the end of the last resolution!!!. So take next 50 lines
+    if (i == m) {
+      z <- j + 50
+      section <- append(section, html.text[j:z])
+      break
+    }
+    # If current line is the beginning of next resolution, finish loop
+    if (gsub("[,.:’']", "", resolutions$resolution[i + 1]) == gsub("[,.:’']", "", html.text[[j]])) {
+      print(paste("break loop", i, "at beginning of next resolution at line", j, "th"))
+      break  
+    }
+    
+    # If current line is the beginning of another section (Detecting roman number), finish loop
+    if (grepl("^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})\\.", html.text[[j]])) {
+      print(paste("break loop", i, "at section end at line", j, "th"))
+      break
+    }
+    
+    section <- append(section, html.text[[j]])
+    
   }
-  to <- from + lines
-  cat(html.text[from:to], file=filename, sep="\n")
+
+  cat(section, file=filename, sep="\n")
   
 }
 

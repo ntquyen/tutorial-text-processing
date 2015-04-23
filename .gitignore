@@ -2,3 +2,4 @@
 .Rhistory
 .RData
 submit.R
+data/drafts/*.txt
