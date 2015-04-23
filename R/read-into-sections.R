@@ -1,5 +1,3 @@
-# setwd("~/Documents/resources/Courses/projects/ir/tutorial-text-processing")
-
 library(XML)
 library(stringr)
 library(dplyr)
@@ -24,6 +22,8 @@ html.text <- sapply(html.text, function(item) {
 resolutions <- c();
 ids <- c();
 adoption.dates <- c();
+
+# Hard coded for position from 111 to 223, wanna improve with better way
 for (i in seq(111, 223, by = 3)) {
   resolutions <- append(resolutions, html.text[[i]])
   ids <- append(ids, html.text[[i - 1]])
@@ -53,12 +53,13 @@ write.csv(resolutions, file="resolutions.csv")
 
 # Extract section and write to file
 for (i in 1:m) {
-  filename = paste("./data/", gsub("[,.:’']", "", resolutions$resolution[i]), 
+  filename = paste("./data/drafts/", gsub("[,.:’']", "", resolutions$resolution[i]), 
                    ".txt", sep="");
   from <- resolutions$section[i]
   lines <- 50
   
-  # A section is rerely larger than 50 lines
+  # A section is rarely larger than 50 lines.
+  # But I also want to improve this code
   if (i < m && resolutions$section[i + 1] - from < lines) {
     lines <- resolutions$section[i + 1] - 1
   }
@@ -66,8 +67,4 @@ for (i in 1:m) {
   cat(html.text[from:to], file=filename, sep="\n")
   
 }
-
-View(resolutions)
-View(html.text)
-
 
