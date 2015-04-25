@@ -2,7 +2,7 @@ library(XML)
 library(stringr)
 library(dplyr)
 
-html.raw <- htmlTreeParse("./data/A_HRC_25_2_session_report_AUV_for_web.htm", useInternalNodes=T)
+html.raw <- htmlTreeParse("./data/docs/A_HRC_25_2_session_report_AUV_for_web.htm", useInternalNodes=T)
 
 html.parse <- xpathApply(html.raw, "//p", xmlValue)
 
@@ -17,6 +17,30 @@ html.text <- str_trim(html.text)
 html.text <- sapply(html.text, function(item) {
   gsub("\\s{2, }", " ", item)
 })
+
+# Position of resolution section
+# res_sec_pos <- grep("^(A\\.|I\\.) Resolutions$", html.text);
+# i <- res_sec_pos + 1
+# 
+# resolutions <- c();
+# ids <- c();ext
+# adoption.dates <- c();
+# 
+# while(grepl("^(B\\.|II\\.)", html.text[i])) {
+#   
+#   id_matches <- str_match(html.text[i], "^\\d+/\\d+")
+#   if (!is.na(id_matches[1,1])) {
+#     ids <- append(ids, id_matches[1,1])
+#   }
+#   
+#   r_matches <- str_match_all(html.text[i], "[a-zA-Z\\s,:]+")
+#   if (length(length(r_matches[[1]]))) {
+#     r <- paste(c(resolution_matches[[1]]), sep = " ")
+#     resolutions <- append(resolutions, r);    
+#   }
+# 
+#   
+# }
 
 # Get the resolution list with their ids and adoption dates
 resolutions <- c();
@@ -55,8 +79,7 @@ write.csv(resolutions, file="./data/resolutions.csv")
 # Extract section and write to file
 total.lines <- length(html.text)
 for (i in 1:m) {
-  filename = paste("./data/drafts/", gsub("[,.:’']", "", resolutions$resolution[i]), 
-                   ".txt", sep="");
+  filename = paste("./data/drafts/", gsub("[,.:’']", "", resolutions$resolution[i]), sep="");
   section <- c()
   from <- resolutions$section[i]
   for(j in from:total.lines) {
